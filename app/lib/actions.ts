@@ -63,7 +63,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     `;
   } catch (error) {
     return {
-      message: "Database Error: Failed to Create Invoice.",
+      message: error instanceof Error ? error.message : "Database Error"
     };
   }
 
@@ -104,7 +104,9 @@ export async function updateInvoice(
         WHERE id = ${id}
       `;
   } catch (error) {
-    return { message: "Database Error: Failed to Update Invoice." };
+    return {
+      message: error instanceof Error ? error.message : "Database Error"
+    };
   }
 
   // Revalidate the cache for the invoices page and redirect the user
