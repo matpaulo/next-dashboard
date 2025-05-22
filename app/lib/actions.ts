@@ -4,6 +4,8 @@ import { z } from "zod";
 import postgres from "postgres";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
 
 const FormSchema = z.object({
   // Zod Schema
@@ -34,6 +36,7 @@ export type State = {
   message?: string | null;
 };
 
+// CREATE INVOICE
 export async function createInvoice(prevState: State, formData: FormData) {
   // Zod Validation
   const validatedFields = CreateInvoice.safeParse({
@@ -63,7 +66,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     `;
   } catch (error) {
     return {
-      message: error instanceof Error ? error.message : "Database Error"
+      message: error instanceof Error ? error.message : "Database Error",
     };
   }
 
@@ -72,6 +75,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
   redirect("/dashboard/invoices");
 }
 
+// UPDATE INVOICE
 export async function updateInvoice(
   id: string,
   prevState: State,
@@ -105,7 +109,7 @@ export async function updateInvoice(
       `;
   } catch (error) {
     return {
-      message: error instanceof Error ? error.message : "Database Error"
+      message: error instanceof Error ? error.message : "Database Error",
     };
   }
 
@@ -114,10 +118,31 @@ export async function updateInvoice(
   redirect("/dashboard/invoices");
 }
 
+// DELETE INVOICE
 export async function deleteInvoice(id: string) {
   // Remove data in DB
   await sql`DELETE FROM invoices WHERE id = ${id}`;
 
   // Revalidate the cache for the invoices page
   revalidatePath("/dashboard/invoices");
+}
+
+// AUTHENTICATION
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
 }
