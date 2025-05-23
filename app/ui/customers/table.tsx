@@ -110,13 +110,13 @@ export default async function CustomersTable({
                         {customer.total_invoices}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {`U$ ${formatCurrency(customer.total_pending)}`}
+                        ${formatCurrency(customer.total_pending)}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                        {`U$ ${formatCurrency(customer.total_paid)}`}
+                        ${formatCurrency(customer.total_paid)}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                        {`U$ ${formatCurrency(customer.total)}`}
+                        ${formatCurrency(customer.total)}
                       </td>
                     </tr>
                   ))}

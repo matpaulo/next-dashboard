@@ -2,6 +2,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Image from "next/image";
 import { lusitana } from "@/app/ui/fonts";
+import InvoiceStatus from "../invoices/status";
 import { fetchLatestInvoices } from "@/app/lib/data";
 
 export default async function LatestInvoices() {
@@ -13,10 +14,8 @@ export default async function LatestInvoices() {
         Latest Invoices
       </h2>
       <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
-        {/* NOTE: Uncomment this code in Chapter 7 */}
-
         <div className="bg-white px-6">
-          {latestInvoices.map((invoice, i) => {
+          {latestInvoices.reverse().map((invoice, i) => {
             return (
               <div
                 key={invoice.id}
@@ -45,8 +44,9 @@ export default async function LatestInvoices() {
                   </div>
                 </div>
                 <p
-                  className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
+                  className={`${lusitana.className} truncate text-lg font-medium flex justify-between w-24`}
                 >
+                  <InvoiceStatus status={invoice.status} />
                   {invoice.amount}
                 </p>
               </div>

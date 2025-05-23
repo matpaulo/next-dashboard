@@ -21,10 +21,29 @@ export async function fetchRevenue() {
   }
 }
 
+export async function fetchRevenueFromCustomers() {
+  try {
+    const data = await sql<{ month: string; total: number }[]>`
+      SELECT 
+        TO_CHAR(invoices.date, 'YYYY-MM') AS month,
+        SUM(invoices.amount) AS total
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      WHERE invoices.status = 'paid'
+      GROUP BY TO_CHAR(invoices.date, 'YYYY-MM')
+      ORDER BY month ASC
+    `;
+    return data;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch revenue data from customers.");
+  }
+}
+
 export async function fetchLatestInvoices() {
   try {
     const data = await sql<LatestInvoiceRaw[]>`
-      SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
+      SELECT invoices.amount, invoices.status, invoices.id, customers.name, customers.image_url, customers.email 
       FROM invoices
       JOIN customers ON invoices.customer_id = customers.id
       ORDER BY invoices.date DESC
