@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Customers",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function Page() {
   const customersData = await fetchCustomers();
 
