@@ -5,4 +5,4 @@ Projeto feito a partir do curso da própria Next onde pude revisitar e aprender 
 Foi utilizado puramente React com componentes SSR do Next e o Zod para validar
 
 Segue link para ver o projeto rodando ou clique no link Deployments
-https://next-dashboard-ivmz5cu9c-matheus-projects-6950dac1.vercel.app
+https://next-dashboard-crs3uajlo-matheus-projects-6950dac1.vercel.app/
